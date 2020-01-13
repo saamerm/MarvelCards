@@ -1,0 +1,25 @@
+name: CI on Push and Pull Request
+
+on: [push, pull_request]
+
+jobs:
+  Android:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Android
+      run: |
+        cd src/MarvelCards
+        nuget restore
+        cd MarvelCards.Android
+        msbuild MarvelCards.Android.csproj /verbosity:normal /t:Rebuild /p:Configuration=Debug
+        
+  iOS:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: iOS
+      run: |
+        cd src/MarvelCards
+        nuget restore
+        msbuild MarvelCards.iOS/MarvelCards.iOS.csproj /verbosity:normal /t:Rebuild /p:Platform=iPhoneSimulator /p:Configuration=Debug
